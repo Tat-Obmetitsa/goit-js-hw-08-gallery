@@ -7,11 +7,10 @@ const overlayModal = document.querySelector('.lightbox__overlay');
 
 const galleryMarkup = createGallery();
 galleryRef.insertAdjacentHTML('beforeend', galleryMarkup);
-
-function createGallery(el, i) {
-  i = 0;
+let currentImgIndex;
+function createGallery(el) {
   el = gallery
-    .map(({ preview, original, description }) => {
+    .map(({ preview, original, description }, index) => {
       return `<li class="gallery__item">
   <a
     class="gallery__link"
@@ -22,7 +21,7 @@ function createGallery(el, i) {
       class="gallery__image"
       src="${preview}"
       data-source="${original}"
-      data-index="${(i += 1)}"
+      data-index="${(index)}"
       alt="${description}"
     />
   </a>
@@ -50,13 +49,18 @@ function onModalClick(evt) {
   }
   lightboxRef.classList.add('is-open');
   lightboxImg.src = evt.target.dataset.source;
-  document.addEventListener('keydown', onCloseEsc);
+  currentImgIndex = Number(evt.target.getAttribute('data-index'));
+  window.addEventListener('keydown', onCloseEsc);
+  window.addEventListener('keydown', onRightDown);
+  window.addEventListener('keydown', onLeftDown);
 }
 
 function onCloseModal() {
   lightboxRef.classList.remove('is-open');
   lightboxImg.src = '';
-  document.addEventListener('keydown', onCloseEsc);
+  window.removeEventListener('keydown', onCloseEsc);
+  window.removeEventListener('keydown', onRightBtn);
+  window.removeEventListener('keydown', onLeftBtn);
 }
 
 function closeOverlay(evt) {
@@ -68,4 +72,23 @@ function onCloseEsc(event) {
   if (event.code === 'Escape') {
     onCloseModal();
   }
+}
+function onRightBtn (evt) {
+  if (evt.code === 'ArrowRight') {
+    currentImgIndex += 1;
+    if (currentImgIndex === gallery.length) {
+      currentImgIndex = 0;
+    }
+  }
+lightboxImg.src = gallery[currentImgIndex].original;
+}
+
+function onLeftBtn (evt) {
+  if (evt.code === 'ArrowLeft') {
+    currentImgIndex -= 1;
+    if (currentImgIndex === gallery.length) {
+      currentImgIndex = 0;
+    }
+  }
+  lightboxImg.src = gallery[currentImgIndex].original;
 }
