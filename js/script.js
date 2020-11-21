@@ -51,8 +51,8 @@ function onModalClick(evt) {
   lightboxImg.src = evt.target.dataset.source;
   currentImgIndex = Number(evt.target.getAttribute('data-index'));
   window.addEventListener('keydown', onCloseEsc);
-  window.addEventListener('keydown', onRightDown);
-  window.addEventListener('keydown', onLeftDown);
+  window.addEventListener('keydown', onRightBtn);
+  window.addEventListener('keydown', onLeftBtn);
 }
 
 function onCloseModal() {
@@ -86,8 +86,8 @@ lightboxImg.src = gallery[currentImgIndex].original;
 function onLeftBtn (evt) {
   if (evt.code === 'ArrowLeft') {
     currentImgIndex -= 1;
-    if (currentImgIndex === gallery.length) {
-      currentImgIndex = 0;
+    if (currentImgIndex === -1) {
+      currentImgIndex = gallery.length - 1;
     }
   }
   lightboxImg.src = gallery[currentImgIndex].original;
