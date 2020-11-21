@@ -22,7 +22,7 @@ function createGallery(el, i) {
       class="gallery__image"
       src="${preview}"
       data-source="${original}"
-      data-index ="${(i += 1)}"
+      data-index="${(i += 1)}"
       alt="${description}"
     />
   </a>
@@ -56,6 +56,7 @@ function onModalClick(evt) {
 function onCloseModal() {
   lightboxRef.classList.remove('is-open');
   lightboxImg.src = '';
+  document.addEventListener('keydown', onCloseEsc);
 }
 
 function closeOverlay(evt) {
